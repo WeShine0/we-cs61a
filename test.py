@@ -5,9 +5,10 @@ def summation(n,term):
     return total
 
 def cube(x):
-    return x*x*x
+    return pow(x,3)
 
 def square(x):
+    #assert x>0 , nonononononono
     return x*x
 
 
@@ -16,6 +17,7 @@ def sumcubes(n):
 
 def sumsquare(n):
     return summation(n,square)
+#lambda x:x*x
 
     
 
