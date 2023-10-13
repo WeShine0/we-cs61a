@@ -2,7 +2,8 @@
 
 from dice import six_sided, four_sided, make_test_dice
 from ucb import main, trace, interact
-
+import pdb
+from math import gcd
 GOAL_SCORE = 100  # The goal of Hog is to score 100 points.
 FIRST_101_DIGITS_OF_PI = 31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
 
@@ -22,6 +23,21 @@ def roll_dice(num_rolls, dice=six_sided):
     assert type(num_rolls) == int, 'num_rolls must be an integer.'
     assert num_rolls > 0, 'Must roll at least once.'
     # BEGIN PROBLEM 1
+    times=num_rolls
+    result=[0]*times
+    n,summ=0,0 
+    a=0
+    while(times>0):
+        result[n]=dice()
+        if result[n]==1:
+            a=1
+        times,n=times-1,n+1
+    for elem in result:
+        summ+=elem
+    if a==1:
+        return a
+    else:
+        return summ
     "*** YOUR CODE HERE ***"
     # END PROBLEM 1
 
@@ -36,6 +52,10 @@ def free_bacon(score):
 
     # Trim pi to only (score + 1) digit(s)
     # BEGIN PROBLEM 2
+    if score==0:
+        pi=3
+    else:
+        pi //=pow(10,100-score)
     "*** YOUR CODE HERE ***"
     # END PROBLEM 2
 
@@ -56,6 +76,13 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert num_rolls <= 10, 'Cannot roll more than 10 dice.'
     assert opponent_score < 100, 'The game should be over.'
     # BEGIN PROBLEM 3
+    if num_rolls==0:
+        if opponent_score==0:
+            return 6
+        else:
+            return free_bacon(opponent_score)
+    else:
+        return roll_dice(num_rolls,dice)
     "*** YOUR CODE HERE ***"
     # END PROBLEM 3
 
@@ -78,6 +105,14 @@ def swine_align(player_score, opponent_score):
     False
     """
     # BEGIN PROBLEM 4a
+    result=gcd(player_score,opponent_score)
+    if player_score!=0 and opponent_score!=0:
+       if result>=10:
+          return True
+       else:
+          return False
+    else:
+        return False
     "*** YOUR CODE HERE ***"
     # END PROBLEM 4a
 
@@ -100,6 +135,10 @@ def pig_pass(player_score, opponent_score):
     False
     """
     # BEGIN PROBLEM 4b
+    if player_score<opponent_score and opponent_score-player_score<3:
+        return True
+    else:
+        return False
     "*** YOUR CODE HERE ***"
     # END PROBLEM 4b
 
