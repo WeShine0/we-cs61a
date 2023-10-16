@@ -281,6 +281,19 @@ def announce_highest(who, last_score=0, running_high=0):
     """
     assert who == 0 or who == 1, 'The who argument should indicate a player.'
     # BEGIN PROBLEM 7
+    def say(score0,score1):
+        if(who==0):
+            gain=score0-last_score
+            if gain>running_high:
+                print(gain,'point(s)!','The most yet for Player',who)
+                return announce_highest(who,score0,gain)
+            return announce_highest(who,score0,running_high)
+        if who==0:
+            gain=score1-last_score
+            if gain>running_high:
+                print(gain,'point(s)','The most yet for Player',who)
+                return announce_highest(who,score0,gain)
+            return announce_highest(who,score0,running_high)
     "*** YOUR CODE HERE ***"
     # END PROBLEM 7
 
@@ -321,6 +334,13 @@ def make_averaged(original_function, trials_count=1000):
     3.0
     """
     # BEGIN PROBLEM 8
+    def average(*args):
+        sum=0
+        for i in range(trials_count):
+            sum+=original_function(*args)
+        return sum/trials_count
+    return average
+        
     "*** YOUR CODE HERE ***"
     # END PROBLEM 8
 
@@ -336,6 +356,27 @@ def max_scoring_num_rolls(dice=six_sided, trials_count=1000):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    max_num = 0 # number of dice that gives the highest average turn score
+    max_res = 0 # highest average turn score
+
+    for i in range(1,11):
+        geta=make_averaged(roll_dice,trials_count)
+        test=geta(i,dice)
+        if test > max_res:
+            max_num = i
+            max_res = test
+    return max_num
+
+    max_num = 0 # number of dice that gives the highest average turn score
+    max_res = 0 # highest average turn score
+
+    for i in range(1,11):
+        get_average = make_averaged(roll_dice, trials_count) 
+        cur_res = get_average(i, dice)
+        if cur_res > max_res:
+            max_num = i
+            max_res = cur_res
+    return max_num
     # END PROBLEM 9
 
 
@@ -385,7 +426,10 @@ def bacon_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    return 6  # Replace this statement
+    zeroscore=free_bacon(opponent_score)
+    if zeroscore>=cutoff:
+        return 0
+    return num_rolls  # Replace this statement
     # END PROBLEM 10
 
 
@@ -395,7 +439,10 @@ def extra_turn_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     Otherwise, it rolls NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    return 6  # Replace this statement
+    var=free_bacon(opponent_score)+score
+    if(pig_pass(var,opponent_score) or swine_align(var,opponent_score) or free_bacon(opponent_score)>=cutoff):
+        return 0
+    return num_rolls  # Replace this statement
     # END PROBLEM 11
 
 
@@ -407,6 +454,34 @@ def final_strategy(score, opponent_score):
     # BEGIN PROBLEM 12
     return 6  # Replace this statement
     # END PROBLEM 12
+
+
+
+"""
+Optional: Problem 12 (0 pt)
+Implement final_strategy, which combines these ideas and any other ideas you have to achieve a high win rate against the always_roll(4) strategy. Some suggestions:
+
+extra_turn_strategy is a good default strategy to start with.
+There's no point in scoring more than 100. Check whether you can win by rolling 0, 1 or 2 dice. If you are in the lead, you might take fewer risks.
+Try to force extra turns.
+Choose the num_rolls and cutoff arguments carefully.
+Take the action that is most likely to win the game.
+You can check that your final strategy is valid by running Ok.
+
+python3 ok -q 12
+Note: calc.py does not currently work. We're fixing a bug with the server and will make it work soon.
+You will also eventually be able to check your exact final win rate by running
+
+python3 calc.py
+This should pop up a window asking for you to confirm your identity, and then it will print out a win rate for your final strategy.
+
+"""
+
+
+
+
+
+
 
 ##########################
 # Command Line Interface #
